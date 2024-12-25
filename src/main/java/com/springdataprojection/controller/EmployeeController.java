@@ -26,6 +26,17 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Employee>> getAllEmployeesProjection() {
+        return ResponseEntity.ok(employeeService.getAllEmployeesProjection());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeProjectionById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getEmployeeProjectionById(id));
+    }
+
+
     @PostMapping("/create")
     public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
         employeeService.addEmployee(employee);

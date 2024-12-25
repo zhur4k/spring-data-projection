@@ -1,5 +1,6 @@
 package com.springdataprojection.service.impl;
 
+import com.springdataprojection.dto.EmployeeProjection;
 import com.springdataprojection.model.Employee;
 import com.springdataprojection.repository.EmployeeRepository;
 import com.springdataprojection.service.EmployeeService;
@@ -17,13 +18,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    public List<EmployeeProjection> getAllEmployeesProjection() {
+        return employeeRepository.findAllProjection();
+    }
+
+    @Override
+    public EmployeeProjection getEmployeeProjectionById(Long id) {
+        return employeeRepository.findByIdProjection(id).orElse(null);
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
     }
 
     @Override
