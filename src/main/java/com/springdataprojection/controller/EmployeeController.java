@@ -1,5 +1,6 @@
 package com.springdataprojection.controller;
 
+import com.springdataprojection.dto.EmployeeProjection;
 import com.springdataprojection.model.Employee;
 import com.springdataprojection.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,12 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployeesProjection() {
+    public ResponseEntity<List<EmployeeProjection>> getAllEmployeesProjection() {
         return ResponseEntity.ok(employeeService.getAllEmployeesProjection());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeProjectionById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeProjection> getEmployeeProjectionById(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeProjectionById(id));
     }
 
