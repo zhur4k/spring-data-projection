@@ -27,12 +27,12 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @GetMapping
+    @GetMapping("/projection")
     public ResponseEntity<List<EmployeeProjection>> getAllEmployeesProjection() {
         return ResponseEntity.ok(employeeService.getAllEmployeesProjection());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/projection/{id}")
     public ResponseEntity<EmployeeProjection> getEmployeeProjectionById(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeProjectionById(id));
     }

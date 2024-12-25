@@ -1,6 +1,7 @@
 package com.springdataprojection.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springdataprojection.dto.EmployeeProjection;
 import com.springdataprojection.model.Department;
 import com.springdataprojection.model.Employee;
 import com.springdataprojection.service.EmployeeService;
@@ -204,6 +205,73 @@ class EmployeeControllerTest {
 
         doThrow(RuntimeException.class).when(employeeService).deleteEmployee(1L);
         mockMvc.perform(delete("/api/employees/delete/{id}", 1L))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void getAllEmployeesProjectionSuccess() throws Exception {
+        Department department = new Department();
+        department.setId(1L);
+        department.setName("Department 1");
+
+        EmployeeProjection projection1 = new EmployeeProjection() {
+            public String getFirstName() { return "John"; }
+            public String getLastName() { return "Doe"; }
+            public String getPosition() { return "Manager"; }
+            public String getDepartmentName() { return "Department 1"; }
+        };
+
+        EmployeeProjection projection2 = new EmployeeProjection() {
+            public String getFirstName() { return "Jane"; }
+            public String getLastName() { return "Smith"; }
+            public String getPosition() { return "Developer"; }
+            public String getDepartmentName() { return "Department 1"; }
+        };
+
+        List<EmployeeProjection> employeeProjections = Arrays.asList(projection1, projection2);
+
+        when(employeeService.getAllEmployeesProjection()).thenReturn(employeeProjections);
+
+        mockMvc.perform(get("/api/employees/projection"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(employeeProjections)));
+    }
+
+    @Test
+    void getAllEmployeesProjectionException() throws Exception {
+        when(employeeService.getAllEmployeesProjection()).thenThrow(RuntimeException.class);
+
+        mockMvc.perform(get("/api/employees/projection"))
+                .andExpect(status().isInternalServerError());
+
+        verify(employeeService, times(1)).getAllEmployeesProjection();
+    }
+
+    @Test
+    void getEmployeeProjectionByIdSuccess() throws Exception {
+        Department department = new Department();
+        department.setId(1L);
+        department.setName("Department 1");
+
+        EmployeeProjection projection = new EmployeeProjection() {
+            public String getFirstName() { return "John"; }
+            public String getLastName() { return "Doe"; }
+            public String getPosition() { return "Manager"; }
+            public String getDepartmentName() { return "Department 1"; }
+        };
+
+        when(employeeService.getEmployeeProjectionById(1L)).thenReturn(projection);
+
+        mockMvc.perform(get("/api/employees/projection/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(projection)));
+    }
+
+    @Test
+    void getEmployeeProjectionByIdException() throws Exception {
+        when(employeeService.getEmployeeProjectionById(1L)).thenThrow(RuntimeException.class);
+
+        mockMvc.perform(get("/api/employees/projection/{id}", 1L))
                 .andExpect(status().isInternalServerError());
     }
 }
